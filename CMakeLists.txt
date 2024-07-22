@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.23.5...3.27)
 
 project(
-        unoapi_dpcpp_examples
+        single-source-shortest-pathsssp
         VERSION 0.1
-        DESCRIPTION "oneAPI sample projects with CMake"
+        DESCRIPTION "sssp"
         LANGUAGES CXX
 )
 
