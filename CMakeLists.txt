@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23.5...3.27)
 
 project(
-        single-source-shortest-pathsssp
+        single_source_shortest_pathsssp
         VERSION 0.1
         DESCRIPTION "sssp"
         LANGUAGES CXX
@@ -56,4 +56,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(googletest)
 
-add_subdirectory(sssp);
+add_subdirectory(sssp)

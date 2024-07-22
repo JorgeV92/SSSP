@@ -24,25 +24,25 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
     std::vector<int> dist(V, INF);
     dist[src] = 0;
 
-    cl::sycl::queue queue;
+    sycl::queue queue;
     std::cout << "Running on "
-              << queue.get_device().get_info<cl::sycl::info::device::name>()
+              << queue.get_device().get_info<sycl::info::device::name>()
               << "\n";
 
     // Buckets
     std::vector<std::vector<int>> buckets((INF / DELTA) + 1);
     buckets[0].push_back(src);
 
-    cl::sycl::buffer<int, 1> dist_buf(dist.data(), dist.size());
+    sycl::buffer<int, 1> dist_buf(dist.data(), dist.size());
 
     auto process_bucket = [&](std::vector<int>& bucket) {
-        cl::sycl::buffer<int, 1> bucket_buf(bucket.data(), bucket.size());
+        sycl::buffer<int, 1> bucket_buf(bucket.data(), bucket.size());
 
-        queue.submit([&](cl::sycl::handler& cgh) {
-            auto dist_acc = dist_buf.get_access<cl::sycl::access::mode::read_write>(cgh);
-            auto bucket_acc = bucket_buf.get_access<cl::sycl::access::mode::read>(cgh);
+        queue.submit([&](sycl::handler& cgh) {
+            auto dist_acc = dist_buf.get_access<sycl::access::mode::read_write>(cgh);
+            auto bucket_acc = bucket_buf.get_access<sycl::access::mode::read>(cgh);
 
-            cgh.parallel_for<class relax_edges>(cl::sycl::range<1>(bucket.size()), [=](cl::sycl::id<1> idx) {
+            cgh.parallel_for<class relax_edges>(sycl::range<1>(bucket.size()), [=](sycl::id<1> idx) {
                 int u = bucket_acc[idx];
 
                 for (const auto& edge : adj[u]) {
