@@ -6,12 +6,13 @@
 
 #include <sycl/sycl.hpp>
 
-class relax_edges;
+class relax_light_edges;
+class relax_heavy_edges;
 
 constexpr int INF = std::numeric_limits<int>::max();
 constexpr int V = 7;  // Number of vertices (A-G)
 constexpr int E = 7; // Number of edges
-constexpr int DELTA = 4; // Bucket size
+constexpr int DELTA = 3; // Bucket size
 
 struct Edge {
     int src, dest, weight;
@@ -65,7 +66,36 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
     sycl::buffer<int, 1> edge_weight_buf(edge_weight.data(), edge_weight.size());
     sycl::buffer<int, 1> dist_buf(dist.data(), dist.size());
 
-    auto process_bucket = [&](std::vector<int>& bucket) {
+    auto process_light_edges = [&](std::vector<int>& bucket) {
+        sycl::buffer<int, 1> bucket_buf(bucket.data(), bucket.size());
+
+        queue.submit([&](sycl::handler& cgh) {
+            auto edge_src_acc = edge_src_buf.get_access<sycl::access::mode::read>(cgh);
+            auto edge_dest_acc = edge_dest_buf.get_access<sycl::access::mode::read>(cgh);
+            auto edge_weight_acc = edge_weight_buf.get_access<sycl::access::mode::read>(cgh);
+            auto dist_acc = dist_buf.get_access<sycl::access::mode::read_write>(cgh);
+            auto bucket_acc = bucket_buf.get_access<sycl::access::mode::read>(cgh);
+            sycl::stream out(1024, 256, cgh); // stream for debugging
+
+            cgh.parallel_for<relax_light_edges>(sycl::range<1>(bucket.size()), [=](sycl::id<1> idx) {
+                int u = bucket_acc[idx];
+                for (int i = 0; i < E; i++) {
+                    if (edge_src_acc[i] == u && edge_weight_acc[i] <= DELTA) {
+                        int v = edge_dest_acc[i];
+                        int weight = edge_weight_acc[i];
+
+                        if (dist_acc[u] != INF && dist_acc[u] + weight < dist_acc[v]) {
+                            dist_acc[v] = dist_acc[u] + weight;
+                            // Debug statement using sycl::stream
+                            out << "Updating distance of vertex " << char('A' + v) << " to " << dist_acc[v] << " from vertex " << char('A' + u) << sycl::endl;
+                        }
+                    }
+                }
+            });
+        }).wait();
+    };
+
+    auto process_heavy_edges = [&](std::vector<int>& bucket) {
         sycl::buffer<int, 1> bucket_buf(bucket.data(), bucket.size());
 
         queue.submit([&](sycl::handler& cgh) {
@@ -76,10 +106,10 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
             auto bucket_acc = bucket_buf.get_access<sycl::access::mode::read>(cgh);
             sycl::stream out(1024, 256, cgh); // Define a stream for debugging
 
-            cgh.parallel_for<relax_edges>(sycl::range<1>(bucket.size()), [=](sycl::id<1> idx) {
+            cgh.parallel_for<relax_heavy_edges>(sycl::range<1>(bucket.size()), [=](sycl::id<1> idx) {
                 int u = bucket_acc[idx];
                 for (int i = 0; i < E; i++) {
-                    if (edge_src_acc[i] == u) {
+                    if (edge_src_acc[i] == u && edge_weight_acc[i] > DELTA) {
                         int v = edge_dest_acc[i];
                         int weight = edge_weight_acc[i];
 
@@ -104,9 +134,9 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
 
         while (!buckets[i].empty()) {
             std::vector<int> bucket = std::move(buckets[i]);
-            process_bucket(bucket);
+            process_light_edges(bucket);
 
-            std::cout << "\nDistances after processing bucket " << i << ":\n";
+            std::cout << "\nDistances after processing light edges of bucket " << i << ":\n";
             queue.submit([&](sycl::handler& cgh) {
                 auto dist_acc = dist_buf.get_access<sycl::access::mode::read>(cgh);
                 cgh.host_task([=]() {
@@ -137,21 +167,25 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
                     }
                 }
             }
+            process_heavy_edges(bucket);
+
+            std::cout << "\nDistances after processing heavy edges of bucket " << i << ":\n";
+            queue.submit([&](sycl::handler& cgh) {
+                auto dist_acc = dist_buf.get_access<sycl::access::mode::read>(cgh);
+                cgh.host_task([=]() {
+                    for (int j = 0; j < V; ++j) {
+                        std::cout << "Vertex " << char('A' + j) << " distance: " << dist_acc[j] << "\n";
+                    }
+                });
+            }).wait();
         }
     }
 
-    // Print the final results
     std::cout << "\nFinal distances:\n";
     print_distances(dist);
 }
 
 int main() {
-    // std::vector<Edge> edges = {
-    //     {0, 1, 3}, {0, 3, 5}, {0, 6, 3}, {0, 4, 3}, // Edges from A (vertex 0)
-    //     {1, 2, 3}, // Edge from B (vertex 1)
-    //     {2, 3, 1}, // Edge from C (vertex 2)
-    //     {4, 5, 5}  // Edge from E (vertex 4)
-    // };
     std::vector<Edge> edges = {
         {0, 1, 3},  // A - B
         {0, 3, 5},  // A - D
@@ -161,7 +195,6 @@ int main() {
         {2, 3, 1},  // C - D
         {4, 5, 5},  // E - F
     };
-
 
     deltaStepping(edges, 0); // Source is A (vertex 0)
 
