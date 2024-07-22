@@ -54,7 +54,6 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
 
             cgh.parallel_for<class relax_edges>(sycl::range<1>(bucket.size()), [=](sycl::id<1> idx) {
                 int u = bucket_acc[idx];
-
                 for (int i = 0; i < E; i++) {
                     if (edge_src_acc[i] == u) {
                         int v = edge_dest_acc[i];
@@ -62,6 +61,8 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
 
                         if (dist_acc[u] != INF && dist_acc[u] + weight < dist_acc[v]) {
                             dist_acc[v] = dist_acc[u] + weight;
+                            // Debug 
+                            printf("Updating distance of vertex %d to %d\n", v, dist_acc[v]);
                         }
                     }
                 }
@@ -86,6 +87,8 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
                                 buckets.resize(new_bucket_idx + 1);
                             }
                             buckets[new_bucket_idx].push_back(v);
+                            // Debug 
+                            printf("Adding vertex %d to bucket %d\n", v, new_bucket_idx);
                         }
                     }
                 }
@@ -93,7 +96,6 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
         }
     }
 
-    // Print the results
     for (int i = 0; i < V; ++i) {
         if (dist[i] == INF)
             std::cout << "Vertex " << i << " is unreachable from source\n";
