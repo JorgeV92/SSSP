@@ -45,7 +45,7 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
     auto process_bucket = [&](std::vector<int>& bucket) {
         sycl::buffer<int, 1> bucket_buf(bucket.data(), bucket.size());
 
-        queue.submit([&](cl::sycl::handler& cgh) {
+        queue.submit([&](sycl::handler& cgh) {
             auto edge_src_acc = edge_src_buf.get_access<sycl::access::mode::read>(cgh);
             auto edge_dest_acc = edge_dest_buf.get_access<sycl::access::mode::read>(cgh);
             auto edge_weight_acc = edge_weight_buf.get_access<sycl::access::mode::read>(cgh);
