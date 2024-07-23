@@ -10,3 +10,7 @@
 <p align="center">
   <img src="/sssp/animation/MovingVertices.gif" alt="Space Points">
 </p>
+
+> "Geometric diagrams are to geometers what board and pieces are to chessmasters: visual aids, helpful but not indispensable."
+> 
+> — Richard J. Trudeau, *Introduction to Graph Theory*
