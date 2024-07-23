@@ -13,6 +13,11 @@ Traditionally, this problem is addressed using classical sequential algorithms l
 
 ## Delta stepping algorithm 
 
+<p align="center">
+  <img src="animation/MovingVertices.gif" alt="Space Points">
+</p>
+
+
 The delta stepping algorithm is designed to iteratively adjust vertex distances in a graph until they reach their final values. It does this by using a series of corrections throughout its steps. 
 
 In this algorithm, vertices are placed into an array of buckets, with each bucket representing a specific range of distances determined by a parameter $\Delta$.  During each phase, the algorithm process vertices from the first non-empty bucket, relaxing their outgoing edges that have weights up to $\Delta$. Edges with weight greater than $\Delta$ are only relaxed later, after ensuring that the starting vertices have finished. The value $\Delta$, referred to as the step width or bucket width, is a positive number.  
