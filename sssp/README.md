@@ -25,6 +25,13 @@ $$L(s) = \\max\\{dist(s, v) : dist(s, v) < \infty\\}$$
 
 where, $dist(v)$ represents the distance between the source vertex $s$ and another vertex $v$, The size of a path if defined by the number of edges traversed in that path. Light edges are those with weights up to the value $\Delta$, while the heavy edges have weights greater than $\Delta$.
 
+Delta Stepping:
+
+- The Delta stepping algorithm is used for the Single-Source Shortest Paths (SSSP) problem, like Dijkstra's algorithm, but it is designed to work efficiently in parallel and on distributed systems.
+- It organizes vertices into buckets based on their tentative distance values, similar to a more granular and distributed version of Dijkstra's priority queue.
+- The algorithm processes vertices in small $\Delta$ which is a parameter that controls the trade-off between parallelism and work efficiency. Each bucket can be processed in parallel.
+- Delta stepping relaxes edges within a bucket before moving to the next one, akin to Dijkstra’s systematic relaxation of edges, but it allows for parallel relaxation of edges within the same bucket.
+
 
 # Compile on Polaris 
 
