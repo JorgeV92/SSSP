@@ -6,9 +6,10 @@
 
 _Comic by Randall Munroe, [XKCD](https://xkcd.com/590/)_
 
-I follow and phrase the following [Wiki](https://en.wikipedia.org/wiki/Parallel_single-source_shortest_path_algorithm) entry on the Delta stepping algorithm. 
+In the spirit of exploring complex ideas with clarity, as demonstrated in the comic above, we turn our attention to a significant topic in algorithmic graph theory: the shortest path problem. This challenge extends to the single-source shortest paths (SSSP) problem, which involves finding the shortest paths from a given source vertex $s$ to all other vertices in the graph. 
 
-In algorithmic graph theory, a fundamental challenge is the shortest path problem. A broader variant of this problem is the single-source shortest paths (SSSP) problem, which involves finding the shortest paths from a given source vertex $s$ to all other vertices in the graph. Traditionally, this problem is solved using classical sequential algorithms like Dijkstra's algorithm. However, I introduce a parallel algorithm designed to solve the SSSP problem know as Delta stepping algorithm.
+Traditionally, this problem is addressed using classical sequential algorithms like Dijkstra's algorithm. However, leveraging insights from the [Wikipedia](https://en.wikipedia.org/wiki/Parallel_single-source_shortest_path_algorithm) entry on the Delta stepping algorithm, I introduce a parallel approach designed to solve the SSSP problem. The Delta stepping algorithm offers a sophisticated method to improve efficiency and performance in solving this fundamental problem. This is my attempt of studying such a problem.
+
 
 ## Delta stepping algorithm 
 
@@ -63,3 +64,11 @@ If you have access to Polaris with the following directions you will be able to 
 Head into the directory `SSSP` and run the following commands 
 
 - `cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build` then `cmake --build build`
+
+## TODO
+
+- Proofread material and verify the accuracy of the algorithm pseudocode.
+- Replace hard-coded graphs with `CLI` functionality and the ability to read from files.
+- Implement Google Test to ensure correctness and identify bugs.
+- Add visualizations using the [Manim](https://3b1b.github.io/manim/index.html#) engine.
+
