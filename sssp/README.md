@@ -33,6 +33,10 @@ Delta Stepping:
 - Delta stepping relaxes edges within a bucket before moving to the next one, akin to Dijkstra’s systematic relaxation of edges, but it allows for parallel relaxation of edges within the same bucket.
 
 
+<p align="center">
+  <img src="images/delta.jpg" alt="SSSP" width="550" height="300">
+</p>
+
 # Compile on Polaris 
 
 If you have access to Polaris with the following directions you will be able to test the algorithm with a default graph that is indicated on the Parallel SSSP on [Wiki](https://en.wikipedia.org/wiki/Parallel_single-source_shortest_path_algorithm)
