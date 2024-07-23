@@ -40,7 +40,7 @@ void print_buckets(const std::vector<std::vector<int>>& buckets) {
 }
 
 void deltaStepping(const std::vector<Edge>& edges, int src) {
-    // Flattened graph representation
+    // Flattened graph representation -> Unable to use complex objects in vectors for kernel parallel execution 
     std::vector<int> edge_src(E);
     std::vector<int> edge_dest(E);
     std::vector<int> edge_weight(E);
