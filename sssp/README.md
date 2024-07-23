@@ -13,10 +13,6 @@ Traditionally, this problem is addressed using classical sequential algorithms l
 
 ## Delta stepping algorithm 
 
-<p align="center">
-  <img src="animation/MovingVertices.gif" alt="Space Points">
-</p>
-
 
 The delta stepping algorithm is designed to iteratively adjust vertex distances in a graph until they reach their final values. It does this by using a series of corrections throughout its steps. 
 
