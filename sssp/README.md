@@ -6,9 +6,13 @@
 
 _Comic by Randall Munroe, [XKCD](https://xkcd.com/590/)_
 
-In the spirit of exploring complex ideas with clarity, as demonstrated in the comic above, we turn our attention to a significant topic in algorithmic graph theory: the shortest path problem. This challenge extends to the single-source shortest paths (SSSP) problem, which involves finding the shortest paths from a given source vertex \( s \) to all other vertices in the graph.
+In the spirit of exploring complex ideas with clarity, as demonstrated in the comic above, we turn our attention to a significant topic in algorithmic graph theory: the shortest path problem. This challenge extends to the single-source shortest paths (SSSP) problem, which involves finding the shortest paths from a given source vertex $s$ to all other vertices in the graph.
 
-Traditionally, this problem is addressed using classical sequential algorithms like Dijkstra's algorithm and the Bellman-Ford algorithm, as discussed in Jeff Erickson's book on algorithms[^1]. However, leveraging insights from the paper on the Delta-stepping algorithm by Meyer and Sanders[^2], I introduce a parallel approach designed to solve the SSSP problem. The Delta-stepping algorithm offers a sophisticated method to improve efficiency and performance in solving this fundamental problem. This is my attempt at studying such a problem.
+Traditionally, this problem is addressed using classical sequential algorithms like Dijkstra's algorithm and the Bellman-Ford algorithm, as discussed in both Jeff Erickson's book on algorithms[^1] and *Introduction to Algorithms, 4th Edition* by Cormen, Leiserson, Rivest, and Stein[^2]. However, leveraging insights from the paper on the Delta-stepping algorithm by Meyer and Sanders[^3], I introduce a parallel approach designed to solve the SSSP problem. The Delta-stepping algorithm offers a sophisticated method to improve efficiency and performance in solving this fundamental problem. This is my attempt at studying such a problem.
+
+[^1]: Jeff Erickson, *Algorithms*, available at [http://jeffe.cs.illinois.edu/teaching/algorithms/](http://jeffe.cs.illinois.edu/teaching/algorithms/).
+[^2]: T. H. Cormen, C. E. Leiserson, R. L. Rivest, and C. Stein, *Introduction to Algorithms, 4th Edition*, MIT Press, 2022.
+[^3]: U. Meyer and P. Sanders, "Δ-stepping: a parallel single source shortest path algorithm," in *European Symposium on Algorithms*, Springer, Berlin, Heidelberg, 2000, pp. 393-404.
 
 ## Delta stepping algorithm 
 
@@ -72,7 +76,4 @@ Head into the directory `SSSP` and run the following commands
 - Replace hard-coded graphs with `CLI` functionality and the ability to read from files.
 - Implement Google Test to ensure correctness and identify bugs.
 - Add visualizations using the [Manim](https://3b1b.github.io/manim/index.html#) engine.
-
-[^1]: Jeff Erickson, *Algorithms*, available at [http://jeffe.cs.illinois.edu/teaching/algorithms/](http://jeffe.cs.illinois.edu/teaching/algorithms/).
-[^2]: U. Meyer and P. Sanders, "Δ-stepping: a parallel single source shortest path algorithm," in *European Symposium on Algorithms*, Springer, Berlin, Heidelberg, 2000, pp. 393-404.
 
