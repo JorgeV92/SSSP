@@ -86,7 +86,7 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
 
                         if (dist_acc[u] != INF && dist_acc[u] + weight < dist_acc[v]) {
                             dist_acc[v] = dist_acc[u] + weight;
-                            // Debug statement using sycl::stream
+                            // Debug 
                             out << "Updating distance of vertex " << char('A' + v) << " to " << dist_acc[v] << " from vertex " << char('A' + u) << sycl::endl;
                         }
                     }
@@ -115,7 +115,7 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
 
                         if (dist_acc[u] != INF && dist_acc[u] + weight < dist_acc[v]) {
                             dist_acc[v] = dist_acc[u] + weight;
-                            // Debug statement using sycl::stream
+                            // Debug statement 
                             out << "Updating distance of vertex " << char('A' + v) << " to " << dist_acc[v] << " from vertex " << char('A' + u) << sycl::endl;
                         }
                     }
@@ -184,6 +184,26 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
     std::cout << "\nFinal distances:\n";
     print_distances(dist);
 }
+
+vector<Edge> generateWikiGraph() {
+
+    std::vector<Edge> edges = {
+        {0, 1, 3},  // A - B
+        {0, 3, 5},  // A - D
+        {0, 6, 3},  // A - G
+        {0, 4, 3},  // A - E
+        {1, 2, 3},  // B - C
+        {2, 3, 1},  // C - D
+        {4, 5, 5},  // E - F
+    };
+    return edges;
+}
+
+vector<Edge> generateRandomGraph() {
+
+}
+
+vector<Edge> readGraphFromFile(std::string filename);
 
 int main() {
     std::vector<Edge> edges = {
