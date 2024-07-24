@@ -66,8 +66,10 @@ If you have access to Polaris with the following directions you will be able to 
 3. Clone the repo `git clone https://github.com/JorgeV92/SSSP.git`
 
 Head into the directory `SSSP` and run the following commands 
-
-- `cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build` then `cmake --build build`
+```bash
+  cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build`
+  cmake --build build
+```
 
 
 ## TODO
