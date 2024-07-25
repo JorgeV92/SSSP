@@ -3,6 +3,7 @@
 #include <limits>
 #include <algorithm>
 #include <queue>
+#include <random>
 
 #include <sycl/sycl.hpp>
 
@@ -10,9 +11,7 @@ class relax_light_edges;
 class relax_heavy_edges;
 
 constexpr int INF = std::numeric_limits<int>::max();
-constexpr int V = 7;  // Number of vertices (A-G)
-constexpr int E = 7; // Number of edges
-constexpr int DELTA = 3; // Bucket size
+
 
 struct Edge {
     int src, dest, weight;
@@ -39,7 +38,16 @@ void print_buckets(const std::vector<std::vector<int>>& buckets) {
     }
 }
 
-void deltaStepping(const std::vector<Edge>& edges, int src) {
+
+void print_graph(const std::vector<Edge>& edges) {
+    if (edges.empty()) { std::cout << "Graph is empty\n"; return; }
+    for (const auto& edge : edges) {
+        std::cout << "src: " << edge.src << " dest: " << edge.dest << " weight: " << edge.weight << "\n";
+    }
+    std::cout << std::endl;
+}
+
+void deltaStepping(const std::vector<Edge>& edges, int src, int V, int E, int DELTA) {
     // Flattened graph representation -> Unable to use complex objects in vectors for kernel parallel execution 
     std::vector<int> edge_src(E);
     std::vector<int> edge_dest(E);
@@ -185,8 +193,8 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
     print_distances(dist);
 }
 
-vector<Edge> generateWikiGraph() {
 
+std::vector<Edge> generateWikiGraph() {
     std::vector<Edge> edges = {
         {0, 1, 3},  // A - B
         {0, 3, 5},  // A - D
@@ -199,24 +207,43 @@ vector<Edge> generateWikiGraph() {
     return edges;
 }
 
-vector<Edge> generateRandomGraph() {
+std::vector<Edge> generateRandomGraph(const int num_vertices, const int num_edges) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> vertex_dis(0, num_vertices - 1);
+    std::uniform_int_distribution<int> weight_dis(1, 10);
 
+    std::vector<Edge> edges(num_edges);
+    for (std::size_t i = 0; i < num_edges; ++i) {
+        int src = vertex_dis(gen);
+        int dest = vertex_dis(gen);
+        while (dest == src) {  // no self-loops 
+            dest = vertex_dis(gen);
+        }
+        int weight = weight_dis(gen);
+        edges[i] = {src, dest, weight};
+    }
+    return edges;
 }
 
-vector<Edge> readGraphFromFile(std::string filename);
+std::vector<Edge> readGraphFromFile(std::string filename);
 
 int main() {
-    std::vector<Edge> edges = {
-        {0, 1, 3},  // A - B
-        {0, 3, 5},  // A - D
-        {0, 6, 3},  // A - G
-        {0, 4, 3},  // A - E
-        {1, 2, 3},  // B - C
-        {2, 3, 1},  // C - D
-        {4, 5, 5},  // E - F
-    };
+    ////////////////////////////////////////////////////
+    constexpr int V = 7;  // Number of vertices 
+    constexpr int E = 7; // Number of edges
+    constexpr int DELTA = 3; // Bucket size
+    ////////////////////////////////////////////////////    
 
-    deltaStepping(edges, 0); // Source is A (vertex 0)
 
-    return 0;
+    // // Generate a Sparse graph
+    // std::vector<Edge> edges = generateRandomGraph(50, 60);
+    // print_graph(edges);
+
+    // Generate Wiki graph
+    std::vector<Edge> edges = generateWikiGraph();
+    // print_graph(edges);
+    deltaStepping(edges, 0, V, E, DELTA); // Source is A (vertex 0)
+
+    return 0;       
 }

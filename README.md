@@ -14,3 +14,5 @@
 > "Geometric diagrams are to geometers what board and pieces are to chessmasters: visual aids, helpful but not indispensable."
 > 
 > — Richard J. Trudeau, *Introduction to Graph Theory*
+
+<hr>
