@@ -53,9 +53,28 @@ Polaris is an NVIDIA A100-based system at Argonne National Laboratory designed t
   - 1 AMD EPYC (Milan) CPU
 - **Total Nodes:** ~560
 
+
+
 # Compile on Polaris 
 
 If you have access to Polaris with the following directions you will be able to test the algorithm with a default graph that is indicated on the Parallel SSSP on [Wiki](https://en.wikipedia.org/wiki/Parallel_single-source_shortest_path_algorithm)
+
+Upon logging into the supercomputer, you will be connected to a shell on one of the login nodes. These nodes are shared by all active users and are not designed for running compute-intensive tasks. To build software or conduct test runs on a dedicated worker node, you should initiate an interactive session with the following command:
+
+```sh
+qsub -I -l select=1 -l walltime=00:30:00 -q debug -l filesystems=home -A <project-name>
+```
+
+
+#### Command Breakdown:
+
+- `qsub` is the command to submit jobs to the scheduler.
+- `-I` means submit an interactive job.
+- `-l select=1` means we want one compute node for this job.
+- `-l walltime=00:30:00` means we want our one node for 30 minutes (format: "HOURS:MINUTES:SECONDS" or "DAYS:HOURS:MINUTES:SECONDS").
+- `-q debug` tells the scheduler which queue we would like to use.
+- `-l filesystems=home` tells the scheduler that we require our home directory for this job. You can also specify `filesystems=home:eagle` if you need access to `/lus/eagle/<project-name>/`.
+- `-A <project-name>` specifies the project to which this job will be charged.
 
 1. Start with loading modules that we need to correctly add all necessary depencedinces and oneapi.
    ```bash
