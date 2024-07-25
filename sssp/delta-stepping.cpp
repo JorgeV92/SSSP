@@ -5,7 +5,7 @@
 #include <queue>
 #include <random>
 
-// #include <sycl/sycl.hpp>
+#include <sycl/sycl.hpp>
 
 class relax_light_edges;
 class relax_heavy_edges;
@@ -245,5 +245,5 @@ int main() {
     // print_graph(edges);
     deltaStepping(edges, 0, V, E, DELTA); // Source is A (vertex 0)
 
-    return 0;
+    return 0;       
 }
