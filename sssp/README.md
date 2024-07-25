@@ -42,6 +42,17 @@ Delta Stepping:
   <img src="images/delta.jpg" alt="SSSP" width="550" height="300">
 </p>
 
+# Hardware on Polaris 
+Polaris is an NVIDIA A100-based system at Argonne National Laboratory designed to accelerate computational and data-intensive research.
+
+#### Polaris Machine Specs
+
+- **Speed:** 44 petaflops
+- **Each Node has:**
+  - 4 NVIDIA (A100) GPUs
+  - 1 AMD EPYC (Milan) CPU
+- **Total Nodes:** ~560
+
 # Compile on Polaris 
 
 If you have access to Polaris with the following directions you will be able to test the algorithm with a default graph that is indicated on the Parallel SSSP on [Wiki](https://en.wikipedia.org/wiki/Parallel_single-source_shortest_path_algorithm)
