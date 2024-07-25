@@ -12,12 +12,6 @@ class relax_heavy_edges;
 
 constexpr int INF = std::numeric_limits<int>::max();
 
-////////////////////////////////////////////////////
-int V;  // Number of vertices 
-int E; // Number of edges
-int DELTA; // Bucket size
-////////////////////////////////////////////////////
-
 
 struct Edge {
     int src, dest, weight;
@@ -53,7 +47,7 @@ void print_graph(const std::vector<Edge>& edges) {
     std::cout << std::endl;
 }
 
-void deltaStepping(const std::vector<Edge>& edges, int src) {
+void deltaStepping(const std::vector<Edge>& edges, int src, int V, int E, int DELTA) {
     // Flattened graph representation -> Unable to use complex objects in vectors for kernel parallel execution 
     std::vector<int> edge_src(E);
     std::vector<int> edge_dest(E);
@@ -201,10 +195,6 @@ void deltaStepping(const std::vector<Edge>& edges, int src) {
 
 
 std::vector<Edge> generateWikiGraph() {
-    V = 7;
-    E = 7;
-    DELTA = 3;
-
     std::vector<Edge> edges = {
         {0, 1, 3},  // A - B
         {0, 3, 5},  // A - D
@@ -239,6 +229,12 @@ std::vector<Edge> generateRandomGraph(const int num_vertices, const int num_edge
 std::vector<Edge> readGraphFromFile(std::string filename);
 
 int main() {
+    ////////////////////////////////////////////////////
+    constexpr int V = 7;  // Number of vertices 
+    constexpr int E = 7; // Number of edges
+    constexpr int DELTA = 3; // Bucket size
+    ////////////////////////////////////////////////////    
+
 
     // // Generate a Sparse graph
     // std::vector<Edge> edges = generateRandomGraph(50, 60);
@@ -247,7 +243,7 @@ int main() {
     // Generate Wiki graph
     std::vector<Edge> edges = generateWikiGraph();
     // print_graph(edges);
-    deltaStepping(edges, 0); // Source is A (vertex 0)
+    deltaStepping(edges, 0, V, E, DELTA); // Source is A (vertex 0)
 
     return 0;
 }
